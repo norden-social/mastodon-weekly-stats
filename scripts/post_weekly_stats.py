@@ -138,7 +138,13 @@ def run() -> int:
     config = load_config()
 
     if not config.force_post and not should_post_now():
-        print("Not Monday 12:00 Europe/Berlin; skipping post.")
+        now_berlin = datetime.now(ZoneInfo("Europe/Berlin"))
+        now_utc = datetime.now(ZoneInfo("UTC"))
+        print(
+            "Not Monday 12:00 Europe/Berlin; skipping post. "
+            f"Current Berlin time is {now_berlin:%Y-%m-%d %H:%M %Z}, "
+            f"current UTC time is {now_utc:%Y-%m-%d %H:%M %Z}."
+        )
         return 0
 
     client = MastodonClient(config.base_url, config.access_token)

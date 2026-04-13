@@ -2,9 +2,9 @@ name: Weekly Mastodon Stats Post
 
 on:
   schedule:
-    # 10:00 and 11:00 UTC on Mondays; script posts only at 12:00 Europe/Berlin.
-    - cron: "0 10 * * 1"
-    - cron: "0 11 * * 1"
+    # 10:00 and 11:00 UTC on Mondays; GitHub cron is UTC-only, and one of these corresponds to 12:00 Europe/Berlin
+    # depending on daylight saving time. The script still guards actual posting to Berlin local 12:00.
+    - cron: "0 10,11 * * 1"
   workflow_dispatch:
     inputs:
       force_post:
