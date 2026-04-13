@@ -19,8 +19,8 @@ Post format:
 
 ## Schedule behavior
 
-The GitHub Action is scheduled for Monday at `10:00` and `11:00` UTC.
-The script itself only posts when local time in `Europe/Berlin` is Monday 12:00,
+The GitHub Action is scheduled for Monday at `12:00` in `Europe/Berlin` using GitHub Actions timezone support.
+The script itself still checks that local time in `Europe/Berlin` is Monday 12:00,
 so it works across DST changes.
 
 ## Setup

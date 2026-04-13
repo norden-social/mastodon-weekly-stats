@@ -82,7 +82,7 @@ def load_config() -> Config:
 
 
 def should_post_now() -> bool:
-    # GitHub Actions schedules are UTC-based, so enforce local Berlin time in code.
+    # GitHub Actions now supports timezone-aware schedules, but keep a Berlin local time guard in code.
     now_berlin = datetime.now(ZoneInfo("Europe/Berlin"))
     return now_berlin.weekday() == 0 and now_berlin.hour == 12
 
