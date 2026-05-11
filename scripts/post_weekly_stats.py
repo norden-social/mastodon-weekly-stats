@@ -86,14 +86,6 @@ def pick_last_week_activity(activity: Any) -> Mapping[str, Any]:
     if not isinstance(candidate, Mapping):
         raise RuntimeError("Unexpected activity payload: list items are not objects")
     return candidate
-    if not isinstance(activity, list) or not activity:
-        raise RuntimeError("Unexpected activity payload: expected non-empty list")
-
-    # Activity data is newest-first. Entry 1 is typically the last completed week.
-    candidate = activity[1] if len(activity) >= 2 else activity[0]
-    if not isinstance(candidate, Mapping):
-        raise RuntimeError("Unexpected activity payload: list items are not objects")
-    return candidate
 
 
 def pick_random_shortcode(emojis: Any) -> str:
