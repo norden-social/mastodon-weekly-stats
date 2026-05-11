@@ -9,9 +9,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 from dataclasses import dataclass
-from datetime import datetime
 from typing import Any, Mapping
-from zoneinfo import ZoneInfo
 
 
 @dataclass(frozen=True)
@@ -19,7 +17,6 @@ class Config:
     # Runtime configuration sourced from environment variables.
     base_url: str
     access_token: str
-    force_post: bool
     dry_run: bool
 
 
@@ -76,18 +73,19 @@ def load_config() -> Config:
     return Config(
         base_url=os.getenv("MASTODON_BASE_URL", "https://norden.social").strip(),
         access_token=access_token,
-        force_post=parse_bool_env("FORCE_POST"),
         dry_run=parse_bool_env("DRY_RUN"),
     )
 
 
-def should_post_now() -> bool:
-    # GitHub Actions now supports timezone-aware schedules, but keep a Berlin local time guard in code.
-    now_berlin = datetime.now(ZoneInfo("Europe/Berlin"))
-    return now_berlin.weekday() == 0 and now_berlin.hour == 12
-
-
 def pick_last_week_activity(activity: Any) -> Mapping[str, Any]:
+    if not isinstance(activity, list) or not activity:
+        raise RuntimeError("Unexpected activity payload: expected non-empty list")
+
+    # Activity data is newest-first. Entry 1 is typically the last completed week.
+    candidate = activity[1] if len(activity) >= 2 else activity[0]
+    if not isinstance(candidate, Mapping):
+        raise RuntimeError("Unexpected activity payload: list items are not objects")
+    return candidate
     if not isinstance(activity, list) or not activity:
         raise RuntimeError("Unexpected activity payload: expected non-empty list")
 
@@ -134,18 +132,8 @@ def build_status(client: MastodonClient) -> str:
 
 
 def run() -> int:
-    # Main orchestration: time guard -> compose text -> optional post.
+    # Main orchestration: compose text -> optional post.
     config = load_config()
-
-    if not config.force_post and not should_post_now():
-        now_berlin = datetime.now(ZoneInfo("Europe/Berlin"))
-        now_utc = datetime.now(ZoneInfo("UTC"))
-        print(
-            "Not Monday 12:00 Europe/Berlin; skipping post. "
-            f"Current Berlin time is {now_berlin:%Y-%m-%d %H:%M %Z}, "
-            f"current UTC time is {now_utc:%Y-%m-%d %H:%M %Z}."
-        )
-        return 0
 
     client = MastodonClient(config.base_url, config.access_token)
     status_text = build_status(client)

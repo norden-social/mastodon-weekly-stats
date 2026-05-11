@@ -20,8 +20,6 @@ Post format:
 ## Schedule behavior
 
 The GitHub Action is scheduled for Monday at `12:00` in `Europe/Berlin` using GitHub Actions timezone support.
-The script itself still checks that local time in `Europe/Berlin` is Monday 12:00,
-so it works across DST changes.
 
 ## Setup
 
@@ -36,5 +34,4 @@ so it works across DST changes.
 
 Use `Actions > Weekly Mastodon Stats Post > Run workflow`:
 
-- `force_post=true` to bypass the time guard
 - `dry_run=true` to generate output without posting
