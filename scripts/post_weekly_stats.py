@@ -119,7 +119,8 @@ def build_status(client: MastodonClient) -> str:
     return (
         f"Letzte Woche waren wir {logins} aktive Accounts und {registrations} "
         f"haben sich neu registriert.\n\n"
-        f"Unser Emoji der Woche ist \"{shortcode}\": :{shortcode}:"
+        f"Unser Emoji der Woche ist \"{shortcode}\": :{shortcode}:\n"
+        f"#nordensocialstats"
     )
 
 
