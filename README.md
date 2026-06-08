@@ -13,9 +13,9 @@ Weekly automated Mastodon post for `norden.social`, ported from an Apple Shortcu
 
 Post format:
 
-`Letzte Woche waren wir X aktive Accounts und Y haben sich neu registriert.`
-
-`Unser Emoji der Woche ist "shortcode": :shortcode:`
+`Letzte Woche waren wir X aktive Accounts und Y haben sich neu registriert.
+Unser Emoji der Woche ist "shortcode": :shortcode:
+#nordensocialstats`
 
 ## Schedule behavior
 
